@@ -2,7 +2,7 @@ import React from 'react';
 import { getImageUrl } from './utils';
 
 function App() {
-  const { GoogleGenerativeAI } = require("@google/generative-ai");
+  const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
 
   const audioRef = React.useRef(null);
@@ -131,7 +131,14 @@ function App() {
 
   React.useEffect(() => {
     async function setUpAi() {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash",
+        safety_settings: [
+          {
+            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+            threshold: HarmBlockThreshold.BLOCK_NONE
+          },
+        ],
+       });
       const chat = model.startChat({
         history: chatHistory
       })
